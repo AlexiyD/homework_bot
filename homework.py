@@ -1,12 +1,12 @@
-import telegram
 import logging
-import requests
-import time
-import sys
 import os
-from dotenv import load_dotenv
+import sys
+import time
 from http import HTTPStatus
 
+import requests
+import telegram
+from dotenv import load_dotenv
 
 load_dotenv()
 logging.basicConfig(
