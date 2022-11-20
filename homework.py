@@ -13,15 +13,14 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(funcName)s, %(levelname)s, %(name)s, %(message)s',
     filename='main.log',
-    )
+)
 handler = [logging.FileHandler('log.txt'),
            logging.StreamHandler(sys.stdout)]
-
-
 
 PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+
 
 RETRY_TIME = 600
 ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
@@ -33,6 +32,7 @@ HOMEWORK_STATUSES = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
+
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
@@ -41,6 +41,7 @@ def send_message(bot, message):
         logging.error(f'отправить сообщение в TG не удолось: {error}')
         raise Exception(error)
 
+
 def get_api_answer(current_timestamp):
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -48,6 +49,7 @@ def get_api_answer(current_timestamp):
     if response.status_code != HTTPStatus.OK:
         raise ReferenceError('Ошибка ответа API')
     return response.json()
+
 
 def check_response(response):
     if not isinstance(response, dict):
@@ -58,6 +60,7 @@ def check_response(response):
         raise TypeError('Ключа homeworks не передал список')
     return response['homeworks']
     
+
 def parse_status(homework):
     homework_name = homework['homework_name']
     homework_status = homework['status']
@@ -70,8 +73,10 @@ def parse_status(homework):
     verdict = HOMEWORK_STATUSES[homework_status]
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
+
 def check_tokens():
     return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
+
 
 def main():
     """Основная логика работы бота."""
