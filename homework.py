@@ -41,6 +41,7 @@ def send_message(bot, message):
         logging.error(f'отправить сообщение в TG не удолось: {error}')
         raise Exception(error)
 
+
 def get_api_answer(current_timestamp):
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -48,6 +49,7 @@ def get_api_answer(current_timestamp):
     if response.status_code != HTTPStatus.OK:
         raise ReferenceError('Ошибка ответа API')
     return response.json()
+
 
 def check_response(response):
     if not isinstance(response, dict):
@@ -58,6 +60,7 @@ def check_response(response):
         raise TypeError('Ключа homeworks не передал список')
     return response['homeworks']
     
+
 def parse_status(homework):
     homework_name = homework['homework_name']
     homework_status = homework['status']
@@ -70,15 +73,15 @@ def parse_status(homework):
     verdict = HOMEWORK_STATUSES[homework_status]
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
+
 def check_tokens():
     return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
 
 
 def main():
     """Основная логика работы бота."""
-
     if not check_tokens():
-         raise KeyError('Отсутствие ключа')
+        raise KeyError('Отсутствие ключа')
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
@@ -103,6 +106,7 @@ def main():
         finally:
             send_message(bot, message)
             time.sleep(RETRY_TIME)
-     
+
+
 if __name__ == '__main__':
     main()
