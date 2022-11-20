@@ -81,7 +81,7 @@ def check_tokens():
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
-        raise KeyError('Отсутствие ключа!')
+        raise KeyError('Отсутствие ключа')
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
