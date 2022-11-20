@@ -6,7 +6,6 @@ import sys
 import os
 from dotenv import load_dotenv
 from http import HTTPStatus
-from typing import overload
 
 
 load_dotenv()
@@ -34,7 +33,7 @@ HOMEWORK_STATUSES = {
 }
 
 
-@overload
+
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
@@ -44,7 +43,7 @@ def send_message(bot, message):
         raise Exception(error)
 
 
-@overload
+
 def get_api_answer(current_timestamp):
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -54,7 +53,7 @@ def get_api_answer(current_timestamp):
     return response.json()
 
 
-@overload
+
 def check_response(response):
     if not isinstance(response, dict):
         raise TypeError('В API нет словоря')
@@ -65,7 +64,7 @@ def check_response(response):
     return response['homeworks']
 
 
-@overload
+
 def parse_status(homework):
     homework_name = homework['homework_name']
     homework_status = homework['status']
@@ -79,7 +78,7 @@ def parse_status(homework):
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
-@overload
+
 def check_tokens():
     return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
 
