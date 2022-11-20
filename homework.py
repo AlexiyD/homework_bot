@@ -33,7 +33,6 @@ HOMEWORK_STATUSES = {
 }
 
 
-
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
@@ -41,7 +40,6 @@ def send_message(bot, message):
     except telegram.TelegramError as error:
         logging.error(f'отправить сообщение в TG не удолось: {error}')
         raise Exception(error)
-
 
 
 def get_api_answer(current_timestamp):
@@ -53,7 +51,6 @@ def get_api_answer(current_timestamp):
     return response.json()
 
 
-
 def check_response(response):
     if not isinstance(response, dict):
         raise TypeError('В API нет словоря')
@@ -62,7 +59,6 @@ def check_response(response):
     if not isinstance(response['homeworks'], list):
         raise TypeError('Ключа homeworks не передал список')
     return response['homeworks']
-
 
 
 def parse_status(homework):
@@ -76,7 +72,6 @@ def parse_status(homework):
         raise KeyError(f'Неизвестен статус {homework_status}')
     verdict = HOMEWORK_STATUSES[homework_status]
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
-
 
 
 def check_tokens():
