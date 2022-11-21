@@ -8,7 +8,6 @@ import requests
 import telegram
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
