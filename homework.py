@@ -7,14 +7,13 @@ from http import HTTPStatus
 import requests
 import telegram
 from dotenv import load_dotenv
-from typing import overload
 
 load_dotenv()
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(funcName)s, %(levelname)s, %(name)s, %(message)s',
-    filename='main.log',
-)
+# logging.basicConfig(
+   # level=logging.INFO,
+   # format='%(funcName)s, %(levelname)s, %(name)s, %(message)s',
+   # filename='main.log',
+# )
 handler = [logging.FileHandler('log.txt'),
            logging.StreamHandler(sys.stdout)]
 
@@ -33,7 +32,7 @@ HOMEWORK_STATUSES = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-@overload
+
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
