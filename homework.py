@@ -36,7 +36,7 @@ HOMEWORK_STATUSES = {
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
-        logging.debug('отправка сообщения в TG')
+        logging.debug('отправка сообщения в TG!')
     except telegram.TelegramError as error:
         logging.error(f'отправить сообщение в TG не удолось: {error}')
         raise Exception(error)
