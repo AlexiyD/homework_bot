@@ -27,6 +27,7 @@ HOMEWORK_STATUSES = {
 
 
 def send_message(bot, message):
+    """Отправляет сообщение в Telegram чат."""
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logging.debug('отправка сообщения в TG!')
@@ -36,6 +37,7 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
+    """Получить статус домашней работы."""
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
     response = requests.get(ENDPOINT, headers=HEADERS, params=params)
@@ -45,6 +47,7 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
+    """Проверка ответа API."""
     if not isinstance(response, dict):
         raise TypeError('В API нет словоря')
     if 'homeworks' not in response:
@@ -55,6 +58,7 @@ def check_response(response):
 
 
 def parse_status(homework):
+    """Информация о статусе работы."""
     homework_name = homework['homework_name']
     homework_status = homework['status']
     if 'homework_name' not in homework:
@@ -68,6 +72,7 @@ def parse_status(homework):
 
 
 def check_tokens():
+    """Проверка доступности переменных окружения."""
     return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
 
 
