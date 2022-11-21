@@ -111,7 +111,7 @@ if __name__ == '__main__':
         level=logging.INFO,
         format='%(funcName)s, %(levelname)s, %(name)s, %(message)s',
         filename='main.log',
-        )
+    )
     handler = [logging.FileHandler('log.txt'),
-           logging.StreamHandler(sys.stdout)]
+               logging.StreamHandler(sys.stdout)]
     main()
