@@ -7,6 +7,7 @@ from http import HTTPStatus
 import requests
 import telegram
 from dotenv import load_dotenv
+from typing import overload
 
 load_dotenv()
 logging.basicConfig(
@@ -32,7 +33,7 @@ HOMEWORK_STATUSES = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-
+@overload
 def send_message(bot, message):
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
