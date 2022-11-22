@@ -48,6 +48,7 @@ def get_api_answer(current_timestamp):
 
 def check_response(response):
     """Проверка ответа API."""
+    logging.debug('Начало проверки')
     if not isinstance(response, dict):
         raise TypeError('В API нет словоря')
     if 'homeworks' not in response:
