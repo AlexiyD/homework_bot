@@ -15,7 +15,7 @@ TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
 
-RETRY_TIME = 600
+RETRY_PERIOD = 600
 ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
 HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
 
@@ -53,18 +53,18 @@ def check_response(response):
     if 'homeworks' not in response:
         raise KeyError('Ключ отсутствует в словаре')
     if not isinstance(response['homeworks'], list):
-        raise TypeError('Ключа homeworks не передал список')
+        raise TypeError('Ключа "homeworks" не передал список')
     return response['homeworks']
 
 
 def parse_status(homework):
     """Информация о статусе работы."""
-    homework_name = homework.get('homework_name')
-    homework_status = homework.get('status')
     if 'homework_name' not in homework:
         raise KeyError('в ответе API нет ключа `homework_name`')
+    homework_name = homework['homework_name']
     if 'status' not in homework:
         raise KeyError('Ключ отсутствует в словаре!')
+    homework_status = homework['status']
     if homework_status not in HOMEWORK_STATUSES:
         raise KeyError(f'Неизвестен статус {homework_status}')
     verdict = HOMEWORK_STATUSES[homework_status]
@@ -103,7 +103,7 @@ def main():
             logging.error(message)
         finally:
             send_message(bot, message)
-            time.sleep(RETRY_TIME)
+            time.sleep(RETRY_PERIOD)
 
 
 if __name__ == '__main__':
