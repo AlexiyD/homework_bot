@@ -59,10 +59,10 @@ def check_response(response):
 
 def parse_status(homework):
     """Информация о статусе работы."""
-    homework_name = homework['homework_name']
-    homework_status = homework['status']
+    homework_name = homework.get('homework_name')
+    homework_status = homework.get('status')
     if 'homework_name' not in homework:
-        raise KeyError('Ключ отсутствует в словаре')
+        raise KeyError('в ответе API нет ключа `homework_name`')
     if 'status' not in homework:
         raise KeyError('Ключ отсутствует в словаре!')
     if homework_status not in HOMEWORK_STATUSES:
