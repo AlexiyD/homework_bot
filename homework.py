@@ -26,6 +26,7 @@ HOMEWORK_VERDICTS = {
 }
 
 
+
 def send_message(bot, message):
     """Отправляет сообщение в Telegram чат."""
     try:
@@ -40,15 +41,25 @@ def get_api_answer(current_timestamp):
     """Получить статус домашней работы."""
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
-    response = requests.get(ENDPOINT, headers=HEADERS, params=params)
+    try:
+        response = requests.get(ENDPOINT, headers=HEADERS, params=params)
+        logging.debug('Отправлен запрос к эндпоинту API-сервиса')
+    except requests.ConnectionError:
+        logging.error('Подключение к Интернету отсутствует')
+        raise ConnectionError('Подключение к Интернету отсутствует')
+    except Exception as error:
+        logging.error(f'API недоступен.Ошибка от сервера: {error}')
+        send_message(f'API недоступен. Ошибка от сервера: {error}')
     if response.status_code != HTTPStatus.OK:
-        raise ReferenceError('Ошибка ответа API')
+        logging.error(f'Код ответа не 200: {response.status_code}')
+        raise requests.exceptions.RequestException(
+            f'Код ответа не 200: {response.status_code}'
+        )
     return response.json()
 
 
 def check_response(response):
     """Проверка ответа API."""
-    logging.debug('Начало проверки')
     if not isinstance(response, dict):
         raise TypeError('В API нет словоря')
     if 'homeworks' not in response:
@@ -60,6 +71,8 @@ def check_response(response):
 
 def parse_status(homework):
     """Информация о статусе работы."""
+    
+    
     if 'homework_name' not in homework:
         raise KeyError('в ответе API нет ключа `homework_name`')
     homework_name = homework['homework_name']
@@ -80,7 +93,8 @@ def check_tokens():
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
-        raise KeyError('Отсутствие ключа')
+        logging.critical('ошибка переменных окружения')
+        raise Exception('ошибка переменных окружения')
 
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
@@ -92,7 +106,7 @@ def main():
                 message = 'Обновлений нет'
             else:
                 message = parse_status(homework[0])
-            current_timestamp = response['current_date']
+            current_timestamp = response.get('current_date')
         except ReferenceError as error:
             message = f'Сбой в работе программы: {error}'
             logging.error(message)
@@ -110,7 +124,7 @@ def main():
 if __name__ == '__main__':
     logging.basicConfig(
         level=logging.INFO,
-        format='%(funcName)s, %(levelname)s, %(name)s, %(message)s',
+        format='%(asctime)s, %(levelname)s, %(name)s, %(message)s',
         filename='main.log',
     )
     handler = [logging.FileHandler('log.txt'),
