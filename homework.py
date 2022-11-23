@@ -26,7 +26,6 @@ HOMEWORK_VERDICTS = {
 }
 
 
-
 def send_message(bot, message):
     """Отправляет сообщение в Telegram чат."""
     try:
@@ -71,8 +70,6 @@ def check_response(response):
 
 def parse_status(homework):
     """Информация о статусе работы."""
-    
-    
     if 'homework_name' not in homework:
         raise KeyError('в ответе API нет ключа `homework_name`')
     homework_name = homework['homework_name']
