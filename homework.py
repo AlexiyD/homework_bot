@@ -32,7 +32,7 @@ def send_message(bot, message):
         logging.info('начали отправку сообщения в TG')
         bot.send_message(TELEGRAM_CHAT_ID, message)
     except telegram.TelegramError as error:
-        logging.error(f'отправить сообщение в TG не удолось: {error}') 
+        logging.error(f'отправить сообщение в TG не удолось: {error}')
         raise Exception(error)
     else:
         logging.debug('отправка сообщения в TG!')
@@ -41,7 +41,7 @@ def send_message(bot, message):
 def get_api_answer(current_timestamp):
     """Получить статус домашней работы."""
     timestamp = current_timestamp or int(time.time())
-    request_params ={
+    request_params = {
         'url': ENDPOINT,
         'headers': HEADERS,
         'params': {'from_date': timestamp}
@@ -88,13 +88,14 @@ def parse_status(homework):
     verdict = HOMEWORK_VERDICTS[homework_status]
     return(f'Изменился статус проверки работы "{homework_name}". {verdict}')
 
+
 def check_tokens():
     """Проверка доступности переменных окружения."""
     return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
 
 
 def main():
-    """Основная логика работы бота."""
+    """Основная логика работы бота.""" 
     if not check_tokens():
         logging.critical('отсутствие переменных окружения!')
         sys.exit('отсутствие переменных окружения!')
