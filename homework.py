@@ -101,8 +101,8 @@ def main():
         sys.exit('отсутствие переменных окружения!')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
-    current_response = ''
-    prev_response = ''
+    current_report = ''
+    prev_report = ''
     while True:
         try:
             response = get_api_answer(current_timestamp)
@@ -110,9 +110,9 @@ def main():
             if homework is None:
                 message = 'Список работ пуст!'
                 send_message(bot, message)
-            current_response = homework
-            if current_response != prev_response:
-                prev_response = current_response
+            current_report = homework
+            if current_report != prev_report:
+                prev_report = current_report
                 message = parse_status(homework[0])
                 send_message(bot, message)
             else:
